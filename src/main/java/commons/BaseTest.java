@@ -1,5 +1,6 @@
 package commons;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -17,16 +18,17 @@ public class BaseTest {
 
     public WebDriver launchApp(String browser, String url)
     {
-        ConfigReader.loadProperties();
 
         if (browser.equalsIgnoreCase("chrome"))
         {
-            System.setProperty(CHROMEWebdriver, System.getProperty("user.dir")+"/src/chromedriver");
-
+            //System.setProperty(CHROMEWebdriver, System.getProperty("user.dir")+"/src/chromedriver");
+            WebDriverManager.chromedriver().setup();
             threadDriver.set(new ChromeDriver());
+
         }
         else if (browser.equalsIgnoreCase("firefox")) {
-            System.setProperty(FIREFOXWebdriver, System.getProperty("user.dir")+"/src/firefoxdriver");
+            //System.setProperty(FIREFOXWebdriver, System.getProperty("user.dir")+"/src/firefoxdriver");
+            WebDriverManager.firefoxdriver().setup();
             threadDriver.set(new FirefoxDriver());
         }
         getDriver().manage().window().maximize();

@@ -9,7 +9,7 @@ public class ConfigReader {
     {
         try {
             prop = new Properties();
-            prop.load(new FileInputStream(System.getProperty("user.dir")+"/src/main/config.properties"));
+            prop.load(new FileInputStream(System.getProperty("user.dir")+"/src/test/resources/config.properties"));
 
         }
         catch (Exception ex)
