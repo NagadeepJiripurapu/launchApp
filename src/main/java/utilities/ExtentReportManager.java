@@ -5,6 +5,8 @@ import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.reporter.ExtentHtmlReporter;
 
 import java.io.File;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -38,9 +40,10 @@ public class ExtentReportManager {
         try {
             File file = new File(filePath);
             if (file.exists()) {
-                // Use addScreenCaptureFromPath() to attach a file in ExtentReports 4.x
-                test.addScreenCaptureFromPath(filePath);
-                test.info("Attached the jacket details file to the report.");
+                test.info("Attaching jacket details file to the report.");
+                String content = new String(Files.readAllBytes(file.toPath()), StandardCharsets.UTF_8);
+                test.info("File contents: \n" + content);
+                //test.info("Attached the jacket details file to the report.");
             } else {
                 test.warning("The jacket details file does not exist at the specified path: " + filePath);
             }
@@ -51,18 +54,18 @@ public class ExtentReportManager {
 
 
 
-    // Start a new test in the report
+    // Create a test
     public static ExtentTest startTest(String testName, String testDescription) {
         extentTest = extentReports.createTest(testName, testDescription);
         return extentTest;
     }
 
-    // End the current test
+    // Flush the report
     public static void endTest() {
         extentReports.flush(); // Always call flush to write the report
     }
 
-    // Close the report after all tests are done
+    // Close the report
     public static void closeReport() {
         extentReports.flush();
     }

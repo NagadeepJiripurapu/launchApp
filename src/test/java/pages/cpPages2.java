@@ -37,7 +37,6 @@ public class cpPages2 {
     private static ExtentTest test;
 
     public cpPages2() {
-        // Initialize the ExtentTest object at the start of the class
         test = ExtentReportManager.startTest("cpPages2 Test", "Test logging actions for cpPages2 class");
     }
 
@@ -92,12 +91,15 @@ public class cpPages2 {
     }
 
     public void collectingJacketsPrice() {
+        String value = "";
         String filePath = "/Users/nagadeepjiripurapu/launchApp/testResult.txt";
         List<WebElement> JacketPrice = getDriver().findElements(jacketPrice);
         for (int i = 0; i < JacketPrice.size(); i++) {
             String priceOfJacket = JacketPrice.get(i).getText();
+            System.out.println(priceOfJacket);
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
                 writer.write(priceOfJacket);
+                writer.newLine();
                 writer.newLine();
             } catch (IOException e) {
                 test.error("Error writing price to file: " + e.getMessage());
@@ -106,8 +108,10 @@ public class cpPages2 {
         List<WebElement> jacketDisc = getDriver().findElements(jacketTitle);
         for (int i = 0; i < jacketDisc.size(); i++) {
             String DiscOfJacket = jacketDisc.get(i).getText();
+            System.out.println(DiscOfJacket);
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
                 writer.write(DiscOfJacket);
+                writer.newLine();
                 writer.newLine();
             } catch (IOException e) {
                 test.error("Error writing description to file: " + e.getMessage());
@@ -116,25 +120,32 @@ public class cpPages2 {
         List<WebElement> jacketPopular = getDriver().findElements(popularJackets);
         for (int i = 0; i < jacketPopular.size(); i++) {
             String PopularJacket = jacketPopular.get(i).getText();
+            System.out.println(PopularJacket);
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
                 writer.write(PopularJacket);
+                writer.newLine();
                 writer.newLine();
             } catch (IOException e) {
                 test.error("Error writing popular jackets to file: " + e.getMessage());
             }
         }
 
-        if (gm.isEnabled(getDriver(), nextPageBtn)) {
+        if (getDriver().findElement(By.xpath("(//div[@class='pagination-container']/ul/li[starts-with(@class,'next-page')]//a)[1]")).isEnabled()) {
+            System.out.println("Next button is enabled");
             try {
                 gm.click(getDriver(), nextPageBtn);
                 collectingJacketsPrice();
-                test.info("Next button is enabled, navigating to next page.");
             } catch (Exception e) {
-                test.error("Failed to click Next button: " + e.getMessage());
+                System.out.println(e.getStackTrace());
             }
+        }
+        else {
+            System.out.println("Next button is disabled.");
+            test.info("Next button is disabled.");
         }
         ExtentReportManager.attachFileToReport(test, filePath);
     }
+
 
     public void collectingJacketsPrice1() {
         // String filePath = "/Users/nagadeepjiripurapu/launchApp/testResult.txt";
@@ -142,6 +153,7 @@ public class cpPages2 {
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write("Jacket Price, Description, Most Popular");
+            writer.newLine();
             writer.newLine();
 
             // Iterate through all pages

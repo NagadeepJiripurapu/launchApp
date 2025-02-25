@@ -13,8 +13,7 @@ import java.time.Duration;
 
 public class BaseTest {
     public static ThreadLocal<WebDriver> threadDriver = new ThreadLocal<>();
-    private static final String CHROMEWebdriver= "webdriver.chrome.driver";
-    private static final String FIREFOXWebdriver= "webdriver.gecko.driver";
+
 
     public WebDriver launchApp(String browser, String url)
     {
@@ -27,7 +26,6 @@ public class BaseTest {
 
         }
         else if (browser.equalsIgnoreCase("firefox")) {
-            //System.setProperty(FIREFOXWebdriver, System.getProperty("user.dir")+"/src/firefoxdriver");
             WebDriverManager.firefoxdriver().setup();
             threadDriver.set(new FirefoxDriver());
         }
