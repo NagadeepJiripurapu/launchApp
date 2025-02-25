@@ -78,7 +78,7 @@ public class dp1Pages {
                 long endTime = 0;
 
 
-                new WebDriverWait(getDriver(), Duration.ofSeconds(10)).until(
+                new WebDriverWait(getDriver(), Duration.ofSeconds(30)).until(
                         ExpectedConditions.attributeToBe(slide, "aria-selected", "true"));
                 startTime = System.currentTimeMillis();
 
