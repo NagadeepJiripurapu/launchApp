@@ -52,6 +52,7 @@ public class dp1Pages {
                     "76ers Celebrate Dikembe Mutombo"
             );
             List<String> actualTitle = gm.getListOfVisibleText(getDriver(), titlesOfSlides);
+            gm.staticWait(4);
             for (int i = 0; i < expectedTitles.size(); i++) {
                 if (actualTitle.get(i).equals(expectedTitles.get(i))) {
                     System.out.println("Slide " + (i) + " title is correct: " + actualTitle.get(i));
@@ -76,20 +77,14 @@ public class dp1Pages {
                 WebElement slide = slides.get(i);
                 long startTime = System.currentTimeMillis();
                 long endTime = 0;
-
-
                 new WebDriverWait(getDriver(), Duration.ofSeconds(30)).until(
                         ExpectedConditions.attributeToBe(slide, "aria-selected", "true"));
                 startTime = System.currentTimeMillis();
-
-
                 new WebDriverWait(getDriver(), Duration.ofSeconds(30)).until(
                         ExpectedConditions.attributeToBe(slide, "aria-selected", "false"));
                 endTime = System.currentTimeMillis();
 
                 long actualDuration = TimeUnit.MILLISECONDS.toSeconds(endTime - startTime);
-
-
                 if (actualDuration == expectedDurations.get(i)) {
                     System.out.println("Slide " + (i + 1) + " duration is correct: " + actualDuration + " seconds");
                     test.info("Slide " + (i + 1) + " duration is correct: " + actualDuration + " seconds");

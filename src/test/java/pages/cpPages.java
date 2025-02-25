@@ -7,6 +7,7 @@ import utilities.ExtentReportManager;
 import com.aventstack.extentreports.ExtentTest;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static commons.BaseTest.getDriver;
 
@@ -61,6 +62,23 @@ public class cpPages {
         try {
             List<WebElement> olderList = getDriver().findElements(threedaysOlder);
             int i = olderList.size();
+            String lastuploaded = gm.getVisibleText(getDriver(), lastuploadedtime);
+            int lastUploadedDay = Integer.parseInt(lastuploaded.substring(0, 1));
+            System.out.println("The last uploaded video is " + lastUploadedDay + " days old");
+            test.info("The last uploaded video is " + lastUploadedDay + " days old.");
+            if (i >= 1) {
+                for (int day = 3; day <= lastUploadedDay; day++) {
+                    String dynamicExpression = "//h3[contains(text(),'VIDEOS')]/parent::div/following-sibling::div//li//time[contains(@aria-label,'" + day + " days ago')]";
+                    List<WebElement> duration = getDriver().findElements(By.xpath(dynamicExpression));
+                    n = duration.size();
+                    count += n;
+                }
+            }
+            System.out.println("The count of videos uploaded time >= 3 days is: " + count);
+            test.info("The count of videos uploaded time >= 3 days is: " + count);
+        } catch (NoSuchElementException e) {
+            List<WebElement> olderList = getDriver().findElements(threedaysOlder);
+            int i = olderList.size();
             String lastuploaded = getDriver().findElement(lastuploadedtime).getText();
             int lastUploadedDay = Integer.parseInt(lastuploaded.substring(0, 1));
             System.out.println("The last uploaded video is " + lastUploadedDay + " days old");
@@ -75,7 +93,7 @@ public class cpPages {
             }
             System.out.println("The count of videos uploaded time >= 3 days is: " + count);
             test.info("The count of videos uploaded time >= 3 days is: " + count);
-        } catch (Exception e) {
+        }catch (Exception e) {
             e.printStackTrace();
             test.error("Error while counting videos uploaded more than 3 days ago: " + e.getMessage());
         }

@@ -34,6 +34,7 @@ public class cpPages2 {
     private static final By nextPageBtn = By.xpath("(//div[@class='pagination-container']/ul/li[starts-with(@class,'next-page')]//a)[1]");
     private static final By nextBtnDisabled = By.xpath("//div[@class='product-grid-top-area']//a[@aria-disabled='true']");
     private static final By jacketList=By.xpath("//div[@class='spacing']/parent::div");
+    private static final By isJacketsSelected=By.xpath("//a[@aria-label='Remove Jackets filter']");
     private static ExtentTest test;
 
     public cpPages2() {
@@ -91,73 +92,83 @@ public class cpPages2 {
     }
 
     public void collectingJacketsPrice() {
-        String filePath = "/Users/nagadeepjiripurapu/launchApp/testResult.txt";
+        if (gm.isDisplayed(getDriver(), isJacketsSelected)) {
 
-        // Log the start of the data collection process
-        test.info("Starting the collection of jacket prices, descriptions, and popular jackets...");
+            String filePath = "/Users/nagadeepjiripurapu/launchApp/testResult.txt";
 
-        // Collect and log Jacket Prices
-        List<WebElement> JacketPrice = getDriver().findElements(jacketPrice);
-        for (int i = 0; i < JacketPrice.size(); i++) {
-            String priceOfJacket = JacketPrice.get(i).getText();
-            test.info("Found jacket price: " + priceOfJacket);  // Log the price of the jacket
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
-                writer.write(priceOfJacket);
-                writer.newLine();
-                writer.newLine();
-            } catch (IOException e) {
-                test.error("Error writing price to file: " + e.getMessage());
+            // Log the start of the data collection process
+            test.info("Starting the collection of jacket prices, descriptions, and popular jackets...");
+
+            // Collect and log Jacket Prices
+            List<String> jacketprice = gm.getListOfVisibleText(getDriver(), jacketPrice);
+            for (String price : jacketprice) {
+                test.info("Found jacket price: " + price);
+                System.out.println(price);
+                try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
+                    writer.write(price);
+                    writer.newLine();
+                    writer.newLine();
+                } catch (IOException e) {
+                    test.error("Error writing price to file: " + e.getMessage());
+                }
             }
-        }
 
-        // Collect and log Jacket Descriptions
-        List<WebElement> jacketDisc = getDriver().findElements(jacketTitle);
-        for (int i = 0; i < jacketDisc.size(); i++) {
-            String DiscOfJacket = jacketDisc.get(i).getText();
-            test.info("Found jacket description: " + DiscOfJacket);  // Log the description of the jacket
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
-                writer.write(DiscOfJacket);
-                writer.newLine();
-                writer.newLine();
-            } catch (IOException e) {
-                test.error("Error writing description to file: " + e.getMessage());
+            // Collect and log Jacket Descriptions
+            List<String> jackettitle = gm.getListOfVisibleText(getDriver(), jacketTitle);
+            for (String title : jackettitle) {
+                test.info("Found jacket title: " + title);
+                System.out.println(title);
+                try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
+                    writer.write(title);
+                    writer.newLine();
+                    writer.newLine();
+                } catch (IOException e) {
+                    test.error("Error writing price to file: " + e.getMessage());
+                }
             }
-        }
 
-        // Collect and log Popular Jackets
-        List<WebElement> jacketPopular = getDriver().findElements(popularJackets);
-        for (int i = 0; i < jacketPopular.size(); i++) {
-            String PopularJacket = jacketPopular.get(i).getText();
-            test.info("Found popular jacket: " + PopularJacket);  // Log the popular jacket
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
-                writer.write(PopularJacket);
-                writer.newLine();
-                writer.newLine();
-            } catch (IOException e) {
-                test.error("Error writing popular jackets to file: " + e.getMessage());
+            // Collect and log Popular Jackets
+            List<WebElement> jacketPopular=getDriver().findElements((By) popularJackets);
+            System.out.println(jacketPopular.size());
+            if (jacketPopular.size()>0) {
+                for (int i = 0; i < jacketPopular.size(); i++) {
+                    String PopularJacket = jacketPopular.get(i).getText();
+                    System.out.println(PopularJacket);
+                    try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
+                        writer.write(PopularJacket);
+                        writer.newLine();
+                    } catch (IOException e) {
+                        System.err.println("Error writing to file: " + e.getMessage());
+                    }
+                }
             }
-        }
-
-        // Check if the next page button is enabled, and navigate if necessary
-        WebElement nextPageButton = getDriver().findElement(By.xpath("(//div[@class='pagination-container']/ul/li[starts-with(@class,'next-page')]//a)[1]"));
-        if (nextPageButton.isEnabled()) {
-            test.info("Next page button is enabled, navigating to the next page...");
-
-            try {
-                gm.click(getDriver(), nextPageBtn);  // Assuming gm is your utility object for clicks
-                test.info("Successfully clicked the 'Next' button and moving to the next page.");
-                collectingJacketsPrice();  // Recursively call to collect data from the next page
-            } catch (Exception e) {
-                test.error("Failed to click 'Next' button: " + e.getMessage());  // Log any errors when clicking
+            else {
+                test.info("No popular jackets found");
+                System.out.println("No popular jackets found proceeding further");
             }
+
+            if (gm.isEnabled(getDriver(), nextPageBtn)) {
+                test.info("Next page button is enabled, navigating to the next page...");
+                System.out.println("Next page button is enabled, navigating to the next page...");
+                try {
+                    gm.click(getDriver(), nextPageBtn);
+                    test.info("Successfully clicked the 'Next' button and moving to the next page.");
+                    collectingJacketsPrice();  // Recursively call to collect data from the next page
+                } catch (Exception e) {
+                    test.error("Failed to click 'Next' button: " + e.getMessage());  // Log any errors when clicking
+                }
+            } else {
+                test.info("Next page button is disabled, no further pages to navigate.");
+            }
+
+            // Attach the result file to the report
+            //ExtentReportManager.attachFileToReport(test, filePath);
+            test.info("Attached the jacket details file to the Extent report.");
         } else {
-            test.info("Next page button is disabled, no further pages to navigate.");
+            test.error("Jackets are not selected");
         }
-
-        // Attach the result file to the report
-        ExtentReportManager.attachFileToReport(test, filePath);
-        test.info("Attached the jacket details file to the Extent report.");
     }
+
 
 
 

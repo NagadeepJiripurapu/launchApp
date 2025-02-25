@@ -1,13 +1,12 @@
 package commons;
 
 import Exception.UiActionsException;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -88,28 +87,33 @@ public class GenericMethods extends BaseTest implements UiActions {
     public List<String> getListOfVisibleText(WebDriver driver, By locator) {
         List<String> textList = new ArrayList<>();
         try {
-            // Using FluentWait to wait for visibility of the first element in the list
+            // Using FluentWait to wait for visibility of all elements in the list
             Wait<WebDriver> wait = new FluentWait<>(driver)
-                    .withTimeout(Duration.ofSeconds(60))
-                    .pollingEvery(Duration.ofSeconds(5))
-                    .ignoring(Exception.class);
+                    .withTimeout(Duration.ofSeconds(60))  // Maximum wait time for the elements to be visible
+                    .pollingEvery(Duration.ofSeconds(5))  // Time interval between checks
+                    .ignoring(NoSuchElementException.class, StaleElementReferenceException.class);  // Ignore element exceptions
 
+            // Wait until the elements are visible
             wait.until(driver1 -> {
-                WebElement element = driver1.findElement(locator);
-                return element != null && element.isDisplayed();
+                List<WebElement> elements = driver1.findElements(locator);
+                return elements.size() > 0&& elements.stream().allMatch(WebElement::isDisplayed);  // Ensure all elements are visible
             });
 
-            // Fetch all elements and get their visible text
-            List<WebElement> ele = driver.findElements(locator);
-            for (WebElement element : ele) {
-                String title = element.getText().trim();
-                textList.add(title);
+            // Fetch all visible elements and get their visible text
+            List<WebElement> elements = driver.findElements(locator);
+            for (WebElement element : elements) {
+                String text = element.getText().trim();
+                if (!text.isEmpty()) {  // Optionally, you can skip empty text
+                    textList.add(text);
+                }
             }
+
         } catch (Exception ex) {
-            throw new UiActionsException("Error occurred while fetching list of visible text :: {}", ex);
+            throw new UiActionsException("Error occurred while fetching list of visible text :: ", ex);
         }
         return textList;
     }
+
 
     @Override
     public void moveToElement(WebDriver driver, By locator) {
@@ -156,6 +160,39 @@ public class GenericMethods extends BaseTest implements UiActions {
             throw new UiActionsException("Error occurred while switching to window :: {}", ex);
         }
     }
+
+    @Override
+    public String getVisibleText(WebDriver driver, By locator) {
+        try {
+
+            Wait<WebDriver> wait = new FluentWait<>(driver)
+                    .withTimeout(Duration.ofSeconds(10))
+                    .pollingEvery(Duration.ofSeconds(1))
+                    .ignoring(NoSuchElementException.class, StaleElementReferenceException.class);
+
+
+            return wait.until(driver1 -> {
+                try {
+                    WebElement element = driver1.findElement(locator);
+                    if (element.isDisplayed() && element.isEnabled()) {
+                        return element.getText();
+                    }
+                    return "";
+                } catch (Exception e) {
+                    return "";
+                }
+            });
+        } catch (Exception ex) {
+            throw new UiActionsException("Error occurred while waiting for the visible text :: {}", ex);
+        }
+    }
+
+
+
+
+
+
+
 
     @Override
     public void scrollToViewJS(WebDriver driver, By locator) {
