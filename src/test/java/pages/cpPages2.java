@@ -144,7 +144,7 @@ public class cpPages2 {
             test.info("Next page button is enabled, navigating to the next page...");
 
             try {
-                gm.click(getDriver(), nextPageBtn);  // Assuming gm is your utility object for clicks
+                gm.click(getDriver(), nextPageBtn);
                 test.info("Successfully clicked the 'Next' button and moving to the next page.");
                 collectingJacketsPrice();  // Recursively call to collect data from the next page
             } catch (Exception e) {
