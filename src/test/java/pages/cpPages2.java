@@ -91,12 +91,16 @@ public class cpPages2 {
     }
 
     public void collectingJacketsPrice() {
-        String value = "";
         String filePath = "/Users/nagadeepjiripurapu/launchApp/testResult.txt";
+
+        // Log the start of the data collection process
+        test.info("Starting the collection of jacket prices, descriptions, and popular jackets...");
+
+        // Collect and log Jacket Prices
         List<WebElement> JacketPrice = getDriver().findElements(jacketPrice);
         for (int i = 0; i < JacketPrice.size(); i++) {
             String priceOfJacket = JacketPrice.get(i).getText();
-            System.out.println(priceOfJacket);
+            test.info("Found jacket price: " + priceOfJacket);  // Log the price of the jacket
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
                 writer.write(priceOfJacket);
                 writer.newLine();
@@ -105,10 +109,12 @@ public class cpPages2 {
                 test.error("Error writing price to file: " + e.getMessage());
             }
         }
+
+        // Collect and log Jacket Descriptions
         List<WebElement> jacketDisc = getDriver().findElements(jacketTitle);
         for (int i = 0; i < jacketDisc.size(); i++) {
             String DiscOfJacket = jacketDisc.get(i).getText();
-            System.out.println(DiscOfJacket);
+            test.info("Found jacket description: " + DiscOfJacket);  // Log the description of the jacket
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
                 writer.write(DiscOfJacket);
                 writer.newLine();
@@ -117,10 +123,12 @@ public class cpPages2 {
                 test.error("Error writing description to file: " + e.getMessage());
             }
         }
+
+        // Collect and log Popular Jackets
         List<WebElement> jacketPopular = getDriver().findElements(popularJackets);
         for (int i = 0; i < jacketPopular.size(); i++) {
             String PopularJacket = jacketPopular.get(i).getText();
-            System.out.println(PopularJacket);
+            test.info("Found popular jacket: " + PopularJacket);  // Log the popular jacket
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
                 writer.write(PopularJacket);
                 writer.newLine();
@@ -130,21 +138,27 @@ public class cpPages2 {
             }
         }
 
-        if (getDriver().findElement(By.xpath("(//div[@class='pagination-container']/ul/li[starts-with(@class,'next-page')]//a)[1]")).isEnabled()) {
-            System.out.println("Next button is enabled");
+        // Check if the next page button is enabled, and navigate if necessary
+        WebElement nextPageButton = getDriver().findElement(By.xpath("(//div[@class='pagination-container']/ul/li[starts-with(@class,'next-page')]//a)[1]"));
+        if (nextPageButton.isEnabled()) {
+            test.info("Next page button is enabled, navigating to the next page...");
+
             try {
-                gm.click(getDriver(), nextPageBtn);
-                collectingJacketsPrice();
+                gm.click(getDriver(), nextPageBtn);  // Assuming gm is your utility object for clicks
+                test.info("Successfully clicked the 'Next' button and moving to the next page.");
+                collectingJacketsPrice();  // Recursively call to collect data from the next page
             } catch (Exception e) {
-                System.out.println(e.getStackTrace());
+                test.error("Failed to click 'Next' button: " + e.getMessage());  // Log any errors when clicking
             }
+        } else {
+            test.info("Next page button is disabled, no further pages to navigate.");
         }
-        else {
-            System.out.println("Next button is disabled.");
-            test.info("Next button is disabled.");
-        }
+
+        // Attach the result file to the report
         ExtentReportManager.attachFileToReport(test, filePath);
+        test.info("Attached the jacket details file to the Extent report.");
     }
+
 
 
     public void collectingJacketsPrice1() {
