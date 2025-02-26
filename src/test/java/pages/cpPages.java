@@ -31,6 +31,7 @@ public class cpPages {
 
     // Method to hover over the 3 dots and accept the prompt
     public void hoverOnThreeDots() {
+        gm.staticWait(5);
         try {
             if (gm.isDisplayed(getDriver(), IAcceptBtn)) {
                 gm.click(getDriver(), IAcceptBtn);
@@ -38,7 +39,8 @@ public class cpPages {
                 gm.moveToElement(getDriver(), threedots);
                 test.info("Hovered over the 3 dots and clicked the 'I Accept' button.");
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             gm.click(getDriver(), cross);
             gm.moveToElement(getDriver(), threedots);
             test.error("Error while hovering over the 3 dots: " + e.getMessage());
@@ -59,43 +61,31 @@ public class cpPages {
     // Method to count the number of videos uploaded more than 3 days ago
     public void countVideosUploadedMoreThan() {
         int n = 0, count = 0;
-        try {
-            List<WebElement> olderList = getDriver().findElements(threedaysOlder);
-            int i = olderList.size();
-            String lastuploaded = gm.getVisibleText(getDriver(), lastuploadedtime);
-            int lastUploadedDay = Integer.parseInt(lastuploaded.substring(0, 1));
-            System.out.println("The last uploaded video is " + lastUploadedDay + " days old");
-            test.info("The last uploaded video is " + lastUploadedDay + " days old.");
-            if (i >= 1) {
-                for (int day = 3; day <= lastUploadedDay; day++) {
-                    String dynamicExpression = "//h3[contains(text(),'VIDEOS')]/parent::div/following-sibling::div//li//time[contains(@aria-label,'" + day + " days ago')]";
-                    List<WebElement> duration = getDriver().findElements(By.xpath(dynamicExpression));
-                    n = duration.size();
-                    count += n;
+        List<WebElement> olderList = getDriver().findElements(threedaysOlder);
+        if (olderList.size() == 0) {
+            throw new NoSuchElementException("No videos uploaded more than 3 days ago found.");
+        }else
+        {
+            try {
+                int i = olderList.size();
+                String lastuploaded = gm.getVisibleText(getDriver(), lastuploadedtime);
+                int lastUploadedDay = Integer.parseInt(lastuploaded.substring(0, 1));
+                System.out.println("The last uploaded video is " + lastUploadedDay + " days old");
+                test.info("The last uploaded video is " + lastUploadedDay + " days old.");
+                if (i >= 1) {
+                    for (int day = 3; day <= lastUploadedDay; day++) {
+                        String dynamicExpression = "//h3[contains(text(),'VIDEOS')]/parent::div/following-sibling::div//li//time[contains(@aria-label,'" + day + " days ago')]";
+                        List<WebElement> duration = getDriver().findElements(By.xpath(dynamicExpression));
+                        n = duration.size();
+                        count += n;
+                    }
                 }
+                System.out.println("The count of videos uploaded time >= 3 days is: " + count);
+                test.info("The count of videos uploaded time >= 3 days is: " + count);
+            } catch (Exception e) {
+                e.printStackTrace();
+                test.error("Error while counting videos uploaded more than 3 days ago: " + e.getMessage());
             }
-            System.out.println("The count of videos uploaded time >= 3 days is: " + count);
-            test.info("The count of videos uploaded time >= 3 days is: " + count);
-        } catch (NoSuchElementException e) {
-            List<WebElement> olderList = getDriver().findElements(threedaysOlder);
-            int i = olderList.size();
-            String lastuploaded = getDriver().findElement(lastuploadedtime).getText();
-            int lastUploadedDay = Integer.parseInt(lastuploaded.substring(0, 1));
-            System.out.println("The last uploaded video is " + lastUploadedDay + " days old");
-            test.info("The last uploaded video is " + lastUploadedDay + " days old.");
-            if (i >= 1) {
-                for (int day = 3; day <= lastUploadedDay; day++) {
-                    String dynamicExpression = "//h3[contains(text(),'VIDEOS')]/parent::div/following-sibling::div//li//time[contains(@aria-label,'" + day + " days ago')]";
-                    List<WebElement> duration = getDriver().findElements(By.xpath(dynamicExpression));
-                    n = duration.size();
-                    count += n;
-                }
-            }
-            System.out.println("The count of videos uploaded time >= 3 days is: " + count);
-            test.info("The count of videos uploaded time >= 3 days is: " + count);
-        }catch (Exception e) {
-            e.printStackTrace();
-            test.error("Error while counting videos uploaded more than 3 days ago: " + e.getMessage());
         }
     }
 }

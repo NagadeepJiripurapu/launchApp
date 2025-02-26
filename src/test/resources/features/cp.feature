@@ -18,7 +18,7 @@ Feature: VeevaSystems Automation coding Assessment
     When User Counting number of slides present under Tickets menu
     Then Getting title of each slide and validate with expected test data
     Then Count how much time each slide is playing and validate with the expected duration
-  @skipTest
+@skipTest
   Scenario: Derived Product Test2 scenario
     Given User navigates to derived product2 test url
     When User scrolled down to the bottom of the page

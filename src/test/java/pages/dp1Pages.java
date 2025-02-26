@@ -5,6 +5,7 @@ import commons.GenericMethods;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import utilities.ExtentReportManager;
 import com.aventstack.extentreports.ExtentTest;
@@ -77,11 +78,18 @@ public class dp1Pages {
                 WebElement slide = slides.get(i);
                 long startTime = System.currentTimeMillis();
                 long endTime = 0;
-                new WebDriverWait(getDriver(), Duration.ofSeconds(30)).until(
-                        ExpectedConditions.attributeToBe(slide, "aria-selected", "true"));
+                new FluentWait<>(getDriver())
+                        .withTimeout(Duration.ofSeconds(60))
+                        .pollingEvery(Duration.ofSeconds(1))
+                        .ignoring(Exception.class)
+                        .until(driver -> slide.getAttribute("aria-selected").equals("true"));
                 startTime = System.currentTimeMillis();
-                new WebDriverWait(getDriver(), Duration.ofSeconds(30)).until(
-                        ExpectedConditions.attributeToBe(slide, "aria-selected", "false"));
+                new FluentWait<>(getDriver())
+                        .withTimeout(Duration.ofSeconds(60))
+                        .pollingEvery(Duration.ofSeconds(1))
+                        .ignoring(Exception.class)
+                        .until(driver -> slide.getAttribute("aria-selected").equals("false"));
+
                 endTime = System.currentTimeMillis();
 
                 long actualDuration = TimeUnit.MILLISECONDS.toSeconds(endTime - startTime);
