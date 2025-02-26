@@ -162,7 +162,7 @@ public class cpPages2 {
             }
 
             // Attach the result file to the report
-            //ExtentReportManager.attachFileToReport(test, filePath);
+            ExtentReportManager.attachFileToReport(test, filePath);
             test.info("Attached the jacket details file to the Extent report.");
         } else {
             test.error("Jackets are not selected");
