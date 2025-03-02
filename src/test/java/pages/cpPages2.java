@@ -57,7 +57,7 @@ public class cpPages2 {
         {
             gm.click(getDriver(), cross);
             gm.moveToElement(getDriver(), Shop);
-            test.error("Failed to hover over Shop section: " + e.getMessage());
+            test.info("Hovered over the Shop section." );
         }
     }
 
@@ -86,7 +86,7 @@ public class cpPages2 {
             {
                 gm.scrollToViewJS(getDriver(), allDepartmentScrollView);
                 gm.click(getDriver(), jacketsRadioButton);
-                test.error("Failed to click on Jackets section: " + exception.getMessage());
+                test.info("Clicked on Jackets section: " );
             }
         }
     }
@@ -155,7 +155,7 @@ public class cpPages2 {
                     test.info("Successfully clicked the 'Next' button and moving to the next page.");
                     collectingJacketsPrice();  // Recursively call to collect data from the next page
                 } catch (Exception e) {
-                    test.error("Failed to click 'Next' button: " + e.getMessage());  // Log any errors when clicking
+                    test.error("Failed to click 'Next' button: " + e.getMessage());
                 }
             } else {
                 test.info("Next page button is disabled, no further pages to navigate.");

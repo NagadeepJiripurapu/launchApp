@@ -20,6 +20,7 @@ public class cpPages {
     public static final By IAcceptBtn = By.xpath("//button[contains(text(),'I Accept')]");
     public static final By threedaysOlder = By.xpath("//h3[contains(text(),'VIDEOS')]/parent::div/following-sibling::div//li//time//span[contains(text(),'3d')]");
     public static final By lastuploadedtime = By.xpath("(//h3[contains(text(),'VIDEOS')]/parent::div/following-sibling::div//li//time//span)[22]");
+
     GenericMethods gm = new GenericMethods();
 
     private static ExtentTest test; // Declare ExtentTest object
@@ -29,7 +30,7 @@ public class cpPages {
         test = ExtentReportManager.startTest("cpPages Test", "Test logging actions for cpPages class");
     }
 
-    // Method to hover over the 3 dots and accept the prompt
+
     public void hoverOnThreeDots() {
         gm.staticWait(5);
         try {
@@ -43,7 +44,7 @@ public class cpPages {
         catch (Exception e) {
             gm.click(getDriver(), cross);
             gm.moveToElement(getDriver(), threedots);
-            test.error("Error while hovering over the 3 dots: " + e.getMessage());
+            test.warning("User didn't get the I Accept Button and successfully  user hover on 3 dots " );
         }
     }
 
@@ -64,8 +65,7 @@ public class cpPages {
         List<WebElement> olderList = getDriver().findElements(threedaysOlder);
         if (olderList.size() == 0) {
             throw new NoSuchElementException("No videos uploaded more than 3 days ago found.");
-        }else
-        {
+        }else {
             try {
                 int i = olderList.size();
                 String lastuploaded = gm.getVisibleText(getDriver(), lastuploadedtime);

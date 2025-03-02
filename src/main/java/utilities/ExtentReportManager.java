@@ -24,7 +24,7 @@ public class ExtentReportManager {
             // Create ExtentHtmlReporter instance
             ExtentHtmlReporter htmlReporter = new ExtentHtmlReporter(filePath);
             htmlReporter.config().setDocumentTitle("Test Automation Report");
-            htmlReporter.config().setReportName("Functional Test Results");
+            htmlReporter.config().setReportName("Automation Assessment Test Results");
             extentReports = new ExtentReports();
             extentReports.attachReporter(htmlReporter);
             extentReports = new ExtentReports();

@@ -39,8 +39,15 @@ public class BaseTest {
         return getDriver();
     }
 
-    public static synchronized WebDriver getDriver()
+    public static WebDriver getDriver()
     {
         return threadDriver.get();
     }
+    public void quitDriver() {
+        if (getDriver() != null) {
+            getDriver().quit();
+            threadDriver.remove();
+        }
+    }
+
 }

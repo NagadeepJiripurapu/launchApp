@@ -7,6 +7,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import utilities.ConfigReader;
 import utilities.ExtentReportManager;
 import com.aventstack.extentreports.ExtentTest;
 
@@ -45,13 +46,9 @@ public class dp1Pages {
 
     public void validatingTitleOfEachSlide() {
         try {
-            List<String> expectedTitles = Arrays.asList(
-                    "Sixers Host Bulls Tonight in South Philly",
-                    "76ers Welcome Alex Reese with Two-Way Contract",
-                    "David Roddy Signs Two-Way Contract with 76ers",
-                    "76ers Sign Lonnie Walker IV",
-                    "76ers Celebrate Dikembe Mutombo"
-            );
+            ConfigReader.loadProperties();
+            String titles=ConfigReader.prop.getProperty("expectedSlideTitles");
+            List<String> expectedTitles = Arrays.asList(titles.split(","));
             List<String> actualTitle = gm.getListOfVisibleText(getDriver(), titlesOfSlides);
             gm.staticWait(4);
             for (int i = 0; i < expectedTitles.size(); i++) {
@@ -60,7 +57,7 @@ public class dp1Pages {
                     test.info("Slide " + (i) + " title is correct: " + actualTitle.get(i));
                 } else {
                     System.out.println("Slide " + (i) + " title is incorrect. Expected: " + expectedTitles.get(i) + " but got: " + actualTitle.get(i));
-                    test.warning("Slide " + (i) + " title is incorrect. Expected: " + expectedTitles.get(i) + " but got: " + actualTitle.get(i));
+                    test.error("Slide " + (i) + " title is incorrect. Expected: " + expectedTitles.get(i) + " but got: " + actualTitle.get(i));
                 }
             }
         } catch (Exception e) {

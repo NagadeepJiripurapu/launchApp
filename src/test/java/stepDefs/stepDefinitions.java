@@ -4,6 +4,7 @@ import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.Status;
 import commons.BaseTest;
 import io.cucumber.java.After;
+import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -183,7 +184,7 @@ public class stepDefinitions extends BaseTest {
     @After
     public void tearDown() {
         try {
-            getDriver().quit();
+            quitDriver();
             extentTest.log(Status.INFO, "Browser closed successfully after test execution.");
         } catch (Exception e) {
             extentTest.log(Status.ERROR, "Failed to close the browser: " + e.getMessage());
