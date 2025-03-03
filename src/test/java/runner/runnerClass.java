@@ -17,7 +17,7 @@ import utilities.ExtentReportManager;
         "pretty",  // Console output
         "html:target/cucumber-reports/cucumber.html",
         "json:target/cucumber-reports/cucumber.json"
-},tags = "not @skipTest"
+}, tags = "not @skipTest"
 )
 public class runnerClass extends AbstractTestNGCucumberTests {
 

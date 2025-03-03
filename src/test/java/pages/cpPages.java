@@ -2,6 +2,7 @@ package pages;
 
 import commons.GenericMethods;
 import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import utilities.ExtentReportManager;
 import com.aventstack.extentreports.ExtentTest;
@@ -41,10 +42,19 @@ public class cpPages {
                 test.info("Hovered over the 3 dots and clicked the 'I Accept' button.");
             }
         }
-        catch (Exception e) {
+        catch (TimeoutException te) {
+            if (gm.isDisplayed(getDriver(), IAcceptBtn)) {
+                gm.click(getDriver(), IAcceptBtn);
+                gm.click(getDriver(), cross);
+                gm.moveToElement(getDriver(), threedots);
+                test.warning("User got the I Accept Button and clicked  successfully user hover on 3 dots ");
+            }
+        }
+        catch (Exception e)
+        {
             gm.click(getDriver(), cross);
             gm.moveToElement(getDriver(), threedots);
-            test.warning("User didn't get the I Accept Button and successfully  user hover on 3 dots " );
+            test.warning("user did not get the I Accept Button and clicked  successfully user hover on 3 dots ");
         }
     }
 

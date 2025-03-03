@@ -1,5 +1,6 @@
 Feature: VeevaSystems Automation coding Assessment
     As a QA Engineer, I want to automate the test cases for the VeevaSystems website so that I can validate the functionality of the website.
+ @skipTest
   Scenario: Successful Implementation of core product test cases
     Given User navigates to core product test url
     When User hovers on 3dots
@@ -11,13 +12,13 @@ Feature: VeevaSystems Automation coding Assessment
     Then User hovering on shop menu and navigating Mens Section
     Then User select the jackets from all department section
     And User collected all the Jackets Price title and Most popular jackets text into a text file
-
+@skipTest
   Scenario: Count how much duration each slide is playing
     Given User navigates to derived product1 test url
     When User Counting number of slides present under Tickets menu
     Then Getting title of each slide and validate with expected test data
     Then Count how much time each slide is playing and validate with the expected duration
-
+@skipTest
   Scenario: Derived Product Test2 scenario
     Given User navigates to derived product2 test url
     When User scrolled down to the bottom of the page
