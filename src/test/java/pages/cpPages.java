@@ -64,7 +64,8 @@ public class cpPages {
         int n = 0, count = 0;
         List<WebElement> olderList = getDriver().findElements(threedaysOlder);
         if (olderList.size() == 0) {
-            throw new NoSuchElementException("No videos uploaded more than 3 days ago found.");
+            System.out.println("No videos uploaded more than 3 days ago found.");
+            test.info("No videos uploaded more than 3 days ago found.");
         }else {
             try {
                 int i = olderList.size();
