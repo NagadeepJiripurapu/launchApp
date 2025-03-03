@@ -36,7 +36,7 @@ public class stepDefinitions extends BaseTest {
     public void user_navigates_to_core_product_test_url() {
         try {
             ConfigReader.loadProperties();
-            launchApp(prop.getProperty("browser"), prop.getProperty("url1"));
+            launchApp(prop.getProperty("cBrowser"), prop.getProperty("url1"));
             extentTest.log(Status.INFO, "Navigated to core product test URL");
         } catch (Exception e) {
             extentTest.log(Status.ERROR, "Failed to navigate to core product test URL: " + e.getMessage());
@@ -79,7 +79,7 @@ public class stepDefinitions extends BaseTest {
     public void user_navigates_to_derived_product1_test_url() {
         try {
             ConfigReader.loadProperties();
-            launchApp(prop.getProperty("browser"), prop.getProperty("url2"));
+            launchApp(prop.getProperty("cBrowser"), prop.getProperty("url2"));
             extentTest.log(Status.INFO, "Navigated to derived product1 test URL.");
         } catch (Exception e) {
             extentTest.log(Status.ERROR, "Failed to navigate to derived product1 test URL: " + e.getMessage());
@@ -121,7 +121,7 @@ public class stepDefinitions extends BaseTest {
     public void user_navigates_to_derived_product2_test_url() {
         try {
             ConfigReader.loadProperties();
-            launchApp(prop.getProperty("browser"), prop.getProperty("url3"));
+            launchApp(prop.getProperty("cBrowser"), prop.getProperty("url3"));
             extentTest.log(Status.INFO, "Navigated to derived product2 test URL.");
         } catch (Exception e) {
             extentTest.log(Status.ERROR, "Failed to navigate to derived product2 test URL: " + e.getMessage());
